@@ -1,0 +1,67 @@
+{
+  "highlights": [
+    {
+      "id": "3AU2Ahepuho",
+      "embed": "https://www.youtube.com/embed/3AU2Ahepuho"
+    },
+    {
+      "id": "CakZ87zwZd4",
+      "embed": "https://www.youtube.com/embed/CakZ87zwZd4"
+    },
+    {
+      "id": "Sz6YWn_AIX4",
+      "embed": "https://www.youtube.com/embed/Sz6YWn_AIX4"
+    },
+    {
+      "id": "YYfVkWbIRWk",
+      "embed": "https://www.youtube.com/embed/YYfVkWbIRWk"
+    },
+    {
+      "id": "RoR7Wt7Ia3I",
+      "embed": "https://www.youtube.com/embed/RoR7Wt7Ia3I"
+    },
+    {
+      "id": "SXWUi2C8Uj8",
+      "embed": "https://www.youtube.com/embed/SXWUi2C8Uj8"
+    }
+  ],
+  "standings": [
+    {
+      "pos": 1,
+      "team": "Galatasaray",
+      "p": 0,
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "pts": 0
+    },
+    {
+      "pos": 2,
+      "team": "Fenerbahçe",
+      "p": 0,
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "pts": 0
+    },
+    {
+      "pos": 3,
+      "team": "Beşiktaş",
+      "p": 0,
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "pts": 0
+    },
+    {
+      "pos": 4,
+      "team": "Trabzonspor",
+      "p": 0,
+      "w": 0,
+      "d": 0,
+      "l": 0,
+      "pts": 0
+    }
+  ],
+  "last_update": ""
+}
