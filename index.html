@@ -3,101 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futbol Analiz Merkezi</title>
+    <title>Futbol Analiz Merkezi - Süper Lig</title>
     <style>
-        :root { --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
+        :root { --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --success: #22c55e; --warning: #f59e0b; --danger: #ef4444; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
         body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
-        header { background: rgba(30, 41, 59, 0.9); padding: 1.5rem; text-align: center; border-bottom: 1px solid var(--border); }
-        h1 { margin: 0; font-size: 1.8rem; } h1 span { color: var(--primary); }
-        #update-time { color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
+        header { background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95)); padding: 2rem 1rem; text-align: center; border-bottom: 1px solid var(--border); }
+        h1 { margin: 0; font-size: 2rem; } h1 span { color: var(--primary); }
+        #update-time { color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-badge.success { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+        .status-badge.warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
         
-        .tabs { display: flex; justify-content: center; gap: 15px; padding: 15px; }
-        .tab-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .tabs { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; background: rgba(30, 41, 59, 0.5); }
+        .tab-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; }
+        .tab-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
         .tab-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
         
-        .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
-        .tab-content { display: none; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .news-card { background: var(--surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
-        .news-title { font-size: 1.2rem; margin: 0 0 10px 0; color: var(--primary); }
+        /* Maç Özeti Kartları */
+        .match-card { background: var(--surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; transition: transform 0.3s; }
+        .match-card:hover { transform: translateX(5px); border-color: var(--primary); }
+        .match-title { font-size: 1.1rem; margin: 0 0 10px 0; color: var(--primary); font-weight: 700; }
+        .match-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-left: 10px; }
+        .match-status.live { background: var(--danger); color: white; animation: pulse 2s infinite; }
+        .match-status.finished { background: var(--success); color: white; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         
-        .table-container { overflow-x: auto; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: rgba(0,0,0,0.3); color: var(--text-muted); }
+        /* Puan Durumu Tablosu */
+        .table-container { overflow-x: auto; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: rgba(0,0,0,0.3); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.85rem; }
+        tr:hover { background: rgba(59, 130, 246, 0.1); }
         .pos { width: 32px; height: 32px; background: #334155; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-weight: bold; }
+        .pos.top3 { background: linear-gradient(135deg, #22c55e, #16a34a); }
+        .pos.europe { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .pos.relegation { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .team-name { font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .points { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+        
+        /* Sistem Durumu Kartı */
+        .system-card { background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.1)); border: 2px solid var(--primary); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .system-card.warning { border-color: var(--warning); background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1)); }
+        
+        .loading { text-align: center; padding: 40px; color: var(--text-muted); }
+        .error { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); border-radius: 8px; padding: 15px; color: var(--danger); }
+        
+        @media (max-width: 768px) {
+            .tabs { gap: 8px; }
+            .tab-btn { padding: 10px 16px; font-size: 0.9rem; }
+            h1 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>⚽ Futbol <span>Merkezi</span></h1>
-    <div id="update-time">Son Güncelleme: Kontrol Ediliyor...</div>
+    <h1>⚽ Süper Lig <span>Analiz Merkezi</span></h1>
+    <div id="update-time">
+        <span class="status-badge warning">Yükleniyor...</span>
+        <span>Son Güncelleme: Kontrol Ediliyor...</span>
+    </div>
 </header>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('analiz')">Sistem & Analiz</button>
-    <button class="tab-btn" onclick="switchTab('puan')">Puan Durumu</button>
+    <button class="tab-btn active" onclick="switchTab('ozet')">📊 Maç Özetleri</button>
+    <button class="tab-btn" onclick="switchTab('puan')">🏆 Puan Durumu</button>
+    <button class="tab-btn" onclick="switchTab('analiz')">📈 Analiz</button>
 </div>
 
 <div class="container">
-    <div id="analiz" class="tab-content active">
-        <div id="news-container">İçerikler yükleniyor...</div>
+    <!-- MAÇ ÖZETLERİ -->
+    <div id="ozet" class="tab-content active">
+        <h2 style="margin-bottom: 20px; color: var(--primary);">⚽ Son Maçlar ve Özetler</h2>
+        <div id="matches-container"><div class="loading">Maç verileri yükleniyor...</div></div>
     </div>
 
+    <!-- PUAN DURUMU -->
     <div id="puan" class="tab-content">
+        <h2 style="margin-bottom: 20px; color: var(--primary);">🏆 Süper Lig Puan Durumu</h2>
         <div class="table-container">
             <table>
                 <thead>
-                    <tr><th>Sıra</th><th>Takım</th><th>O</th><th>G</th><th>B</th><th>M</th><th>Puan</th></tr>
+                    <tr><th width="50">#</th><th>Takım</th><th width="50">O</th><th width="50">G</th><th width="50">B</th><th width="50">M</th><th width="70">Puan</th></tr>
                 </thead>
                 <tbody id="standings-body">
-                    <tr><td colspan="7">Yükleniyor...</td></tr>
+                    <tr><td colspan="7" class="loading">Puan durumu yükleniyor...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <!-- ANALİZ -->
+    <div id="analiz" class="tab-content">
+        <h2 style="margin-bottom: 20px; color: var(--primary);">📈 Sistem & Analiz</h2>
+        <div id="analysis-container"><div class="loading">Analiz verileri yükleniyor...</div></div>
+    </div>
 </div>
 
 <script>
+    let globalData = null;
+
     function switchTab(tabId) {
         document.querySelectorAll('.tab-content, .tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         event.currentTarget.classList.add('active');
     }
 
+    function getStatusBadge(status) {
+        if (status.includes('CANLI')) return '<span class="match-status live">🔴 CANLI</span>';
+        if (status.includes('TAMAMLANDI')) return '<span class="match-status finished">✅ TAMAMLANDI</span>';
+        return '';
+    }
+
+    function getPosClass(pos, total) {
+        const position = parseInt(pos);
+        if (position <= 3) return 'top3'; // Şampiyonlar Ligi
+        if (position <= 6) return 'europe'; // Avrupa Kupaları
+        if (position >= total - 2) return 'relegation'; // Düşme Hattı
+        return '';
+    }
+
     async function loadData() {
         try {
             const res = await fetch('data.json?v=' + new Date().getTime());
-            const data = await res.json();
+            if (!res.ok) throw new Error('Dosya bulunamadı');
+            globalData = await res.json();
 
-            document.getElementById('update-time').innerText = "Son Veri Güncellemesi: " + data.last_update;
+            const lastUpdate = globalData.last_update || 'Bilinmiyor';
+            const source = globalData.source || 'API';
+            const isLive = source.includes('Football-Data') && !lastUpdate.includes('Yedek');
+            
+            document.getElementById('update-time').innerHTML = `
+                <span class="status-badge ${isLive ? 'success' : 'warning'}">${isLive ? '🟢 Canlı' : '🟡 Yedek Veri'}</span>
+                <span>Son Güncelleme: ${lastUpdate}</span>
+            `;
 
-            document.getElementById('news-container').innerHTML = data.analysis.map(item => `
-                <div class="news-card">
-                    <h3 class="news-title">${item.title}</h3>
-                    <p style="color:var(--text-muted); line-height:1.5;">${item.desc}</p>
+            // Maç Özetleri
+            const matches = globalData.analysis.filter(item => 
+                item.title.includes('⚽') && (item.title.includes('CANLI') || item.title.includes('TAMAMLANDI'))
+            );
+            
+            const matchesContainer = document.getElementById('matches-container');
+            if (matches.length > 0) {
+                matchesContainer.innerHTML = matches.map(match => `
+                    <div class="match-card">
+                        <h3 class="match-title">${getStatusBadge(match.title)} ${match.title.replace(/⚽.*?-/, '').trim()}</h3>
+                        <p style="color:var(--text-muted); line-height:1.6; margin: 10px 0 0 0;">${match.desc}</p>
+                    </div>
+                `).join('');
+            } else {
+                matchesContainer.innerHTML = `
+                    <div class="match-card">
+                        <h3 class="match-title">📅 Yaklaşık Maçlar</h3>
+                        <p style="color:var(--text-muted); line-height:1.6;">Son 7 gün içinde oynanmış maç bulunamadı. Yeni sezon başladığında tüm maç sonuçları ve özeti burada görünecektir.</p>
+                    </div>
+                `;
+            }
+
+            // Puan Durumu
+            const standings = globalData.standings || [];
+            const totalTeams = standings.length;
+            
+            document.getElementById('standings-body').innerHTML = standings.map(t => {
+                const posClass = getPosClass(t.pos, totalTeams);
+                return `
+                    <tr>
+                        <td><span class="pos ${posClass}">${t.pos}</span></td>
+                        <td class="team-name">${t.team}</td>
+                        <td>${t.played || t.p || '-'}</td>
+                        <td>${t.won || t.w || '-'}</td>
+                        <td>${t.drawn || t.d || '-'}</td>
+                        <td>${t.lost || t.l || '-'}</td>
+                        <td><span class="points">${t.points || t.pts || '-'}</span></td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Analiz
+            const analysisItems = globalData.analysis.filter(item => 
+                !item.title.includes('⚽') || (!item.title.includes('CANLI') && !item.title.includes('TAMAMLANDI'))
+            );
+            
+            document.getElementById('analysis-container').innerHTML = analysisItems.map(item => `
+                <div class="${item.title.includes('Sistem') ? 'system-card' : 'match-card'} ${item.title.includes('Yedek') ? 'warning' : ''}">
+                    <h3 class="match-title">${item.title}</h3>
+                    <p style="color:var(--text-muted); line-height:1.6; margin: 10px 0 0 0;">${item.desc}</p>
                 </div>
-            `).join('');
-
-            document.getElementById('standings-body').innerHTML = data.standings.map(t => `
-                <tr>
-                    <td><span class="pos">${t.pos}</span></td>
-                    <td style="font-weight:600;">${t.team}</td>
-                    <td>${t.played || t.p}</td>
-                    <td>${t.won || t.w}</td>
-                    <td>${t.drawn || t.d}</td>
-                    <td>${t.lost || t.l}</td>
-                    <td><strong style="color:var(--primary); font-size:1.1rem;">${t.points || t.pts}</strong></td>
-                </tr>
             `).join('');
             
         } catch (e) {
-            document.getElementById('news-container').innerHTML = '<div class="news-card"><h3 class="news-title">🔴 Kritik Hata</h3><p>data.json dosyası GitHub tarafından oluşturulmamış veya Vercel bağlantısı kopmuş. Lütfen GitHub Actions sekmesini kontrol et.</p></div>';
+            console.error('Veri yükleme hatası:', e);
+            document.getElementById('matches-container').innerHTML = `
+                <div class="error">
+                    <strong>🔴 Veri Yükleme Hatası</strong><br>
+                    data.json dosyasına ulaşılamıyor. Lütfen botun çalıştırıldığından emin olun.<br>
+                    <small>Hata: ${e.message}</small>
+                </div>
+            `;
         }
     }
+
+    // Sayfa yüklendiğinde verileri çek
     loadData();
+    
+    // Her 60 saniyede bir otomatik yenile
+    setInterval(loadData, 60000);
 </script>
 </body>
 </html>
