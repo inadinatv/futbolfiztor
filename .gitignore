@@ -26,10 +26,14 @@ target/
 # Python specific
 __pycache__/
 *.pyc
+__pycache__/
 *.pyo
 *.pyd
 .Python
 *.so
+.Python
+*.egg-info/
+.eggs/
 
 # Compressed files
 *.zip
