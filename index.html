@@ -3,119 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Futbol Merkezi - Özetler, Puan Durumu & Fikstür</title>
+    <title>Gelişmiş Maç Analiz ve İstatistik Merkezi</title>
+    <!-- İkonlar için FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #22c55e;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --primary: #3b82f6;
             --text: #f8fafc;
             --text-muted: #94a3b8;
+            --border: #334155;
         }
+        * { box-sizing: border-box; }
         body {
             font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text);
             margin: 0;
             padding: 0;
         }
         header {
-            background: #020617;
-            padding: 1rem;
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
             text-align: center;
-            border-bottom: 1px solid #334155;
-        }
-        h1 { margin: 0; font-size: 1.5rem; color: var(--accent); }
-        .nav-tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            background: #0f172a;
-            padding: 10px;
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 100;
+        }
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+        h1 span { color: var(--primary); }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            background: var(--bg);
         }
         .tab-btn {
-            background: var(--card-bg);
+            background: var(--surface);
             color: var(--text);
-            border: 1px solid #334155;
-            padding: 8px 16px;
-            border-radius: 20px;
+            border: 1px solid var(--border);
+            padding: 10px 24px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .tab-btn.active {
-            background: var(--accent);
-            color: #000;
-        }
-        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
-        .tab-content { display: none; }
+        .tab-btn:hover { background: #475569; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+        
+        .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Video Grid */
-        .video-grid {
+        /* Analiz Haber Grid */
+        .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
         }
-        .video-card {
-            background: var(--card-bg);
-            border-radius: 8px;
+        .news-card {
+            background: var(--surface);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid #334155;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
         }
-        iframe { width: 100%; height: 200px; border: none; }
+        .news-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .news-img { width: 100%; height: 190px; object-fit: cover; border-bottom: 3px solid var(--primary); }
+        .news-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .news-title { font-size: 1.15rem; margin: 0 0 12px 0; font-weight: 700; line-height: 1.4; }
+        .news-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
+        .read-more {
+            display: inline-block;
+            text-align: center;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .read-more:hover { background: #2563eb; }
 
-        /* Tablo */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #334155; }
-        th { background: #020617; color: var(--accent); }
+        /* Tablo Stilleri */
+        .table-container { overflow-x: auto; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: rgba(0,0,0,0.3); font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); }
+        tr:hover td { background: rgba(255,255,255,0.05); }
+        .team-cell { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+        .team-logo { width: 28px; height: 28px; object-fit: contain; }
+        .pos { width: 32px; height: 32px; background: #334155; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-weight: bold; }
+        
+        .loading { text-align: center; padding: 50px; color: var(--text-muted); font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>⚽ TR Futbol Merkezi</h1>
+    <h1><i class="fas fa-futbol"></i> Maç <span>Merkezi</span></h1>
 </header>
 
-<div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('ozetler')">🎬 Maç Özetleri</button>
-    <button class="tab-btn" onclick="switchTab('puan')">📊 Puan Durumu</button>
+<div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('analiz')"><i class="fas fa-newspaper"></i> Analiz & Özetler</button>
+    <button class="tab-btn" onclick="switchTab('puan')"><i class="fas fa-list-ol"></i> Puan Durumu</button>
 </div>
 
 <div class="container">
-    <!-- Özetler Sekmesi -->
-    <div id="ozetler" class="tab-content active">
-        <div class="video-grid" id="highlights-container">
-            <p>Özetler yükleniyor...</p>
+    <!-- Analiz & Özetler Sekmesi -->
+    <div id="analiz" class="tab-content active">
+        <div id="news-container" class="news-grid">
+            <div class="loading"><i class="fas fa-spinner fa-spin"></i> İçerikler hazırlanıyor...</div>
         </div>
     </div>
 
     <!-- Puan Durumu Sekmesi -->
     <div id="puan" class="tab-content">
-        <table>
-            <thead>
-                <tr>
-                    <th>Sıra</th>
-                    <th>Takım</th>
-                    <th>O</th>
-                    <th>G</th>
-                    <th>B</th>
-                    <th>M</th>
-                    <th>Puan</th>
-                </tr>
-            </thead>
-            <tbody id="standings-body">
-                <tr><td colspan="7">Yükleniyor...</td></tr>
-            </tbody>
-        </table>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sıra</th>
+                        <th>Takım</th>
+                        <th>O</th>
+                        <th>G</th>
+                        <th>B</th>
+                        <th>M</th>
+                        <th>Puan</th>
+                    </tr>
+                </thead>
+                <tbody id="standings-body">
+                    <tr><td colspan="7" class="loading"><i class="fas fa-spinner fa-spin"></i> Yükleniyor...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -132,29 +167,41 @@
             const res = await fetch('data.json?v=' + new Date().getTime());
             const data = await res.json();
 
-            // Özetleri Bas
-            const hContainer = document.getElementById('highlights-container');
-            hContainer.innerHTML = data.highlights.map(item => `
-                <div class="video-card">
-                    <iframe src="${item.embed}" allowfullscreen></iframe>
+            // 1. Haber ve Analizleri Ekrana Basma
+            const newsHtml = data.analysis.map(item => `
+                <div class="news-card">
+                    ${item.img ? `<img src="${item.img}" class="news-img" alt="Haber Görseli">` : `<div class="news-img" style="background:#334155; display:flex; align-items:center; justify-content:center;"><i class="fas fa-image fa-3x" style="color:#64748b;"></i></div>`}
+                    <div class="news-body">
+                        <h3 class="news-title">${item.title}</h3>
+                        <p class="news-desc">${item.desc}</p>
+                        <a href="${item.link}" target="_blank" class="read-more">Detaylı Oku</a>
+                    </div>
                 </div>
             `).join('');
+            document.getElementById('news-container').innerHTML = newsHtml || '<p style="text-align:center;">Şu an içerik bulunamadı.</p>';
 
-            // Puan Durumunu Bas
-            const sBody = document.getElementById('standings-body');
-            sBody.innerHTML = data.standings.map(t => `
+            // 2. Takım Logolarıyla Puan Durumunu Ekrana Basma
+            const standingsHtml = data.standings.map(t => `
                 <tr>
-                    <td><b>${t.pos}</b></td>
-                    <td>${t.team}</td>
+                    <td><span class="pos">${t.pos}</span></td>
+                    <td>
+                        <div class="team-cell">
+                            ${t.logo ? `<img src="${t.logo}" class="team-logo">` : ''}
+                            ${t.team}
+                        </div>
+                    </td>
                     <td>${t.p}</td>
                     <td>${t.w}</td>
                     <td>${t.d}</td>
                     <td>${t.l}</td>
-                    <td><b>${t.pts}</b></td>
+                    <td><strong style="color:var(--primary); font-size:1.1rem;">${t.pts}</strong></td>
                 </tr>
             `).join('');
+            document.getElementById('standings-body').innerHTML = standingsHtml;
+            
         } catch (e) {
             console.error("Veri yüklenemedi:", e);
+            document.getElementById('news-container').innerHTML = '<div class="loading">Veriler yüklenirken hata oluştu. Botun çalışmasını bekleyiniz.</div>';
         }
     }
 
