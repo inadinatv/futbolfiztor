@@ -1,0 +1,6 @@
+{
+  "name": "futbol-ozet-puan-durumu",
+  "version": "1.0.0",
+  "description": "Otomatik futbol verileri ve maç özetleri",
+  "main": "index.html"
+}
