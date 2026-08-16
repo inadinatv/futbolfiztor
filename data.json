@@ -1,23 +1,49 @@
 {
-  "name": "gunun-maclari-bot",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "engines": {
-    "node": ">=18.18.0"
-  },
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "fetch-data": "node scripts/fetch-football-data.mjs"
-  },
-  "dependencies": {
-    "next": "^15.1.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "dotenv": "^16.4.5"
-  }
+  "standings": [
+    {
+      "pos": "1",
+      "team": "Galatasaray A.Ş.",
+      "played": "0",
+      "won": "0",
+      "drawn": "0",
+      "lost": "0",
+      "points": "0"
+    },
+    {
+      "pos": "2",
+      "team": "Fenerbahçe A.Ş.",
+      "played": "0",
+      "won": "0",
+      "drawn": "0",
+      "lost": "0",
+      "points": "0"
+    },
+    {
+      "pos": "3",
+      "team": "Beşiktaş A.Ş.",
+      "played": "0",
+      "won": "0",
+      "drawn": "0",
+      "lost": "0",
+      "points": "0"
+    },
+    {
+      "pos": "4",
+      "team": "Trabzonspor A.Ş.",
+      "played": "0",
+      "won": "0",
+      "drawn": "0",
+      "lost": "0",
+      "points": "0"
+    }
+  ],
+  "analysis": [
+    {
+      "title": "Sistem Bağlantı Durumu",
+      "desc": "Bot aktif olarak çalışıyor. Durum: 🔴 TFF Bağlantısı Gecikti (Geçici Yedek Veriler Gösteriliyor). Veri akışı sorunsuz sağlandığında maç analizleri burada listelenecektir.",
+      "link": "#",
+      "img": ""
+    }
+  ],
+  "last_update": "16.08.2026 10:34:36"
 }
