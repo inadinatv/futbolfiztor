@@ -139,20 +139,18 @@
             const isLive = source.includes('Football-Data') && !lastUpdate.includes('Yedek');
             
             document.getElementById('update-time').innerHTML = `
-                <span class="status-badge ${isLive ? 'success' : 'warning'}">${isLive ? '🟢 Canlı' : '🟡 Yedek Veri'}</span>
+                <span class="status-badge ${isLive ? 'success' : 'warning'}">${isLive ? '🟢 Canlı' : '🟡 Simülasyon'}</span>
                 <span>Son Güncelleme: ${lastUpdate}</span>
             `;
 
-            // Maç Özetleri
-            const matches = globalData.analysis.filter(item => 
-                item.title.includes('⚽') && (item.title.includes('CANLI') || item.title.includes('TAMAMLANDI'))
-            );
+            // Maç Özetleri - matches alanından direkt çek
+            const matches = globalData.matches || [];
             
             const matchesContainer = document.getElementById('matches-container');
             if (matches.length > 0) {
                 matchesContainer.innerHTML = matches.map(match => `
                     <div class="match-card">
-                        <h3 class="match-title">${getStatusBadge(match.title)} ${match.title.replace(/⚽.*?-/, '').trim()}</h3>
+                        <h3 class="match-title">${getStatusBadge(match.status)} ${match.title}</h3>
                         <p style="color:var(--text-muted); line-height:1.6; margin: 10px 0 0 0;">${match.desc}</p>
                     </div>
                 `).join('');
@@ -184,13 +182,11 @@
                 `;
             }).join('');
 
-            // Analiz
-            const analysisItems = globalData.analysis.filter(item => 
-                !item.title.includes('⚽') || (!item.title.includes('CANLI') && !item.title.includes('TAMAMLANDI'))
-            );
+            // Analiz - Sistem durumu ve maçlar
+            const analysisItems = globalData.analysis || [];
             
             document.getElementById('analysis-container').innerHTML = analysisItems.map(item => `
-                <div class="${item.title.includes('Sistem') ? 'system-card' : 'match-card'} ${item.title.includes('Yedek') ? 'warning' : ''}">
+                <div class="${item.title.includes('Sistem') ? 'system-card' : 'match-card'} ${item.title.includes('Simülasyon') ? 'warning' : ''}">
                     <h3 class="match-title">${item.title}</h3>
                     <p style="color:var(--text-muted); line-height:1.6; margin: 10px 0 0 0;">${item.desc}</p>
                 </div>
