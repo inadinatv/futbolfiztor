@@ -85,8 +85,11 @@
                 <tr>
                     <td><span class="pos">${t.pos}</span></td>
                     <td style="font-weight:600;">${t.team}</td>
-                    <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
-                    <td><strong style="color:var(--primary); font-size:1.1rem;">${t.pts}</strong></td>
+                    <td>${t.played || t.p}</td>
+                    <td>${t.won || t.w}</td>
+                    <td>${t.drawn || t.d}</td>
+                    <td>${t.lost || t.l}</td>
+                    <td><strong style="color:var(--primary); font-size:1.1rem;">${t.points || t.pts}</strong></td>
                 </tr>
             `).join('');
             
