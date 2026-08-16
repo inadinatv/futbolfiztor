@@ -1,0 +1,30 @@
+name: Futbol Veri Güncelleyici Bot
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Her saat başı otomatik çalışır
+  workflow_dispatch: # Elle tetikleme butonu ekler
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repoyu Kopyala
+        uses: actions/checkout@v3
+
+      - name: Python Ortamını Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Botu Çalıştır ve Verileri Çek
+        run: python fetcher.py
+
+      - name: Değişiklikleri GitHub Reposuna İşle (Commit & Push)
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git status
+          git commit -m "Auto update football data" || exit 0
+          git push
