@@ -1,42 +1,49 @@
 import json
 import urllib.request
 import xml.etree.ElementTree as ET
-
-# Senin RapidAPI Anahtarın buraya eklendi
-API_KEY = "23f9a5f274msh45ab2adf1d7eaf9p1648fcjsne1a9747e08f8"
-LEAGUE_ID = "203" # Türkiye Süper Lig Kimliği
-SEASON = "2026"   # Güncel Sezon (Bulunduğumuz yıl)
+import re
 
 def get_standings():
-    url = f"https://api-football-v1.p.rapidapi.com/v3/standings?season={SEASON}&league={LEAGUE_ID}"
-    req = urllib.request.Request(url)
-    req.add_header("x-rapidapi-key", API_KEY)
-    req.add_header("x-rapidapi-host", "api-football-v1.p.rapidapi.com")
-    
+    # Hiçbir API kullanmadan doğrudan puan tablosunu içeren açık HTML sayfasını okuyoruz
+    url = "https://www.trtspor.com.tr/puan-durumu/trendyol-super-lig/"
+    standings = []
     try:
-        with urllib.request.urlopen(req) as response:
-            data = json.loads(response.read().decode())
-            standings_data = data['response'][0]['league']['standings'][0]
-            
-            standings = []
-            for team in standings_data:
-                standings.append({
-                    "pos": team['rank'],
-                    "team": team['team']['name'],
-                    "logo": team['team']['logo'],
-                    "p": team['all']['played'],
-                    "w": team['all']['win'],
-                    "d": team['all']['draw'],
-                    "l": team['all']['lose'],
-                    "pts": team['points']
-                })
-            return standings
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        html = urllib.request.urlopen(req).read().decode('utf-8')
+        
+        # HTML içindeki Tablo (tbody) alanını buluyoruz
+        tbody_match = re.search(r'<tbody[^>]*>(.*?)</tbody>', html, re.DOTALL | re.IGNORECASE)
+        if tbody_match:
+            # Tablodaki satırları (<tr>) tek tek ayırıyoruz
+            trs = re.findall(r'<tr[^>]*>(.*?)</tr>', tbody_match.group(1), re.DOTALL | re.IGNORECASE)
+            for tr in trs:
+                # Satırdaki sütunları (<td>) buluyoruz
+                tds = re.findall(r'<td[^>]*>(.*?)</td>', tr, re.DOTALL | re.IGNORECASE)
+                if len(tds) >= 8:
+                    # İçerisindeki HTML link etiketlerini (<a href..>) temizliyoruz
+                    clean_tds = [re.sub(r'<[^>]+>', '', td).strip() for td in tds]
+                    
+                    pos = clean_tds[0]
+                    team_name = clean_tds[1]
+                    
+                    # Eğer ilk sütun bir sayı ise (sıra numarası), bu geçerli bir takımdır
+                    if pos.isdigit():
+                        standings.append({
+                            "pos": pos,
+                            "team": team_name,
+                            "p": clean_tds[2],  # Oynanan Maç
+                            "w": clean_tds[3],  # Galibiyet
+                            "d": clean_tds[4],  # Beraberlik
+                            "l": clean_tds[5],  # Mağlubiyet
+                            "pts": clean_tds[-1] # Puan (Son sütun)
+                        })
     except Exception as e:
-        print("Puan durumu çekilemedi:", e)
-        return []
+        print("Puan durumu HTML sayfasından çekilemedi:", e)
+        
+    return standings
 
 def get_analysis():
-    # TRT Spor RSS üzerinden analizler ve haberler
+    # TRT Spor'un tamamen açık RSS beslemesinden maç analizlerini ve spor haberlerini çekiyoruz
     rss_url = "https://www.trtspor.com.tr/rss/futbol.xml"
     news = []
     try:
@@ -69,14 +76,14 @@ def get_analysis():
     return news
 
 def main():
-    print("Sistem çalışıyor, veriler toplanıyor...")
+    print("API'siz sistem çalışıyor, veriler toplanıyor...")
     
     standings = get_standings()
     analysis = get_analysis()
     
     if not standings:
         standings = [
-            {"pos": 1, "team": "Veri Bekleniyor", "logo": "", "p": 0, "w": 0, "d": 0, "l": 0, "pts": 0}
+            {"pos": 1, "team": "Veriler şu an güncelleniyor...", "p": 0, "w": 0, "d": 0, "l": 0, "pts": 0}
         ]
         
     output_data = {
@@ -86,7 +93,7 @@ def main():
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(output_data, f, ensure_ascii=False, indent=2)
-    print("data.json başarıyla güncellendi!")
+    print("data.json tamamen açık kaynaklardan başarıyla güncellendi!")
 
 if __name__ == "__main__":
     main()
