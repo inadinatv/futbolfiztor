@@ -1,48 +1,49 @@
 {
   "standings": [
     {
-      "pos": 1,
+      "pos": "1",
       "team": "Galatasaray A.Ş.",
-      "p": "-",
-      "w": "-",
-      "d": "-",
-      "l": "-",
-      "pts": "-"
+      "p": "0",
+      "w": "0",
+      "d": "0",
+      "l": "0",
+      "pts": "0"
     },
     {
-      "pos": 2,
+      "pos": "2",
       "team": "Fenerbahçe A.Ş.",
-      "p": "-",
-      "w": "-",
-      "d": "-",
-      "l": "-",
-      "pts": "-"
+      "p": "0",
+      "w": "0",
+      "d": "0",
+      "l": "0",
+      "pts": "0"
     },
     {
-      "pos": 3,
+      "pos": "3",
       "team": "Beşiktaş A.Ş.",
-      "p": "-",
-      "w": "-",
-      "d": "-",
-      "l": "-",
-      "pts": "-"
+      "p": "0",
+      "w": "0",
+      "d": "0",
+      "l": "0",
+      "pts": "0"
     },
     {
-      "pos": 4,
+      "pos": "4",
       "team": "Trabzonspor A.Ş.",
-      "p": "-",
-      "w": "-",
-      "d": "-",
-      "l": "-",
-      "pts": "-"
+      "p": "0",
+      "w": "0",
+      "d": "0",
+      "l": "0",
+      "pts": "0"
     }
   ],
   "analysis": [
     {
-      "title": "Veri Çekme İşlemi Beklemede (Bot Koruması)",
-      "desc": "Spor sitelerinin güvenlik sistemleri (Cloudflare) şu an anlık veri çekmemizi durdurdu. Bot sistemi 1 saat sonra farklı bir kanaldan tekrar veri çekmeyi deneyecektir.",
+      "title": "Sistem Bağlantı Durumu",
+      "desc": "Bot aktif olarak çalışıyor. Durum: 🔴 TFF Bağlantısı Gecikti (Geçici Yedek Veriler Gösteriliyor). Veri akışı sorunsuz sağlandığında maç analizleri burada listelenecektir.",
       "link": "#",
       "img": ""
     }
-  ]
+  ],
+  "last_update": "16.08.2026 09:13:44"
 }
