@@ -3,6 +3,7 @@ import urllib.request
 import ssl
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List, Any
+import random
 
 
 # SSL sertifika doğrulamasını devre dışı bırak (güvenli ortamlarda kullanılmamalı)
@@ -17,18 +18,19 @@ def create_unverified_context():
         return None
 
 
-def fetch_api_data(url: str) -> Optional[Dict]:
+def fetch_api_data(url: str, api_key: str = None) -> Optional[Dict]:
     """API'den JSON verisi çeker."""
     ctx = create_unverified_context()
     
     try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept': 'application/json'
-            }
-        )
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'application/json'
+        }
+        if api_key:
+            headers['X-Auth-Token'] = api_key
+        
+        req = urllib.request.Request(url, headers=headers)
         
         if ctx:
             response = urllib.request.urlopen(req, timeout=15, context=ctx)
@@ -43,12 +45,11 @@ def fetch_api_data(url: str) -> Optional[Dict]:
         return None
 
 
-def get_football_standings() -> Optional[List[Dict[str, Any]]]:
+def get_football_standings(api_key: str = None) -> Optional[List[Dict[str, Any]]]:
     """Football-Data.org API'den Süper Lig puan durumunu çeker."""
-    # Türkiye Süper Lig standings
     url = "https://api.football-data.org/v4/competitions/TR1/standings"
     
-    data = fetch_api_data(url)
+    data = fetch_api_data(url, api_key)
     
     if not data or 'standings' not in data:
         return None
@@ -84,7 +85,7 @@ def get_football_standings() -> Optional[List[Dict[str, Any]]]:
         return None
 
 
-def get_recent_matches() -> List[Dict[str, Any]]:
+def get_recent_matches(api_key: str = None) -> List[Dict[str, Any]]:
     """Son oynanan maçları getirir."""
     today = datetime.now()
     start_date = (today - timedelta(days=7)).strftime('%Y-%m-%d')
@@ -92,7 +93,7 @@ def get_recent_matches() -> List[Dict[str, Any]]:
     
     url = f"https://api.football-data.org/v4/competitions/TR1/matches?dateFrom={start_date}&dateTo={end_date}"
     
-    data = fetch_api_data(url)
+    data = fetch_api_data(url, api_key)
     
     matches = []
     
@@ -124,6 +125,120 @@ def get_recent_matches() -> List[Dict[str, Any]]:
     return matches
 
 
+def generate_live_matches() -> List[Dict[str, Any]]:
+    """Gerçekçi simüle edilmiş canlı maç verileri üretir."""
+    teams = [
+        "Galatasaray", "Fenerbahçe", "Beşiktaş", "Trabzonspor",
+        "Başakşehir", "Göztepe", "Konyaspor", "Antalyaspor",
+        "Alanyaspor", "Kasımpaşa", "Sivasspor", "Eyüpspor",
+        "Kayserispor", "Rizespor", "Bodrum FK", "Gaziantep FK",
+        "Hatayspor", "Adana Demirspor", "Samsunspor", "Karagümrük"
+    ]
+    
+    matches = []
+    num_matches = random.randint(3, 6)
+    
+    # Haftanın maçlarını oluştur
+    today = datetime.now()
+    
+    for i in range(num_matches):
+        # Rastgele iki takım seç
+        home_idx = random.randint(0, len(teams) - 1)
+        away_idx = random.randint(0, len(teams) - 1)
+        while away_idx == home_idx:
+            away_idx = random.randint(0, len(teams) - 1)
+        
+        home_team = teams[home_idx]
+        away_team = teams[away_idx]
+        
+        # Maç durumu (çoğunlukla tamamlanmış, bazen canlı)
+        is_live = random.random() < 0.2  # %20 şansla canlı maç
+        
+        if is_live:
+            # Canlı maç - rastgele skor
+            home_score = random.randint(0, 3)
+            away_score = random.randint(0, 3)
+            status = "CANLI 🔴"
+            minute = random.randint(15, 85)
+            desc = f"📅 Bugün | ⏱️ {minute}'. Dakika | 🏆 Skor: {home_score} - {away_score}"
+        else:
+            # Tamamlanmış maç
+            match_day_offset = random.randint(-6, -1)
+            match_date = today + timedelta(days=match_day_offset)
+            date_str = match_date.strftime("%d.%m.%Y")
+            
+            # Gerçekçi skor dağılımı
+            home_score = random.choices([0, 1, 2, 3, 4], weights=[20, 35, 25, 15, 5])[0]
+            away_score = random.choices([0, 1, 2, 3, 4], weights=[25, 35, 25, 10, 5])[0]
+            
+            status = "TAMAMLANDI ✅"
+            desc = f"📅 {date_str} | 🏆 Maç Sonucu: {home_score} - {away_score}"
+        
+        matches.append({
+            "title": f"{home_team} vs {away_team}",
+            "desc": desc,
+            "link": "#",
+            "img": "",
+            "status": status
+        })
+    
+    return matches
+
+
+def generate_live_standings() -> List[Dict[str, Any]]:
+    """Gerçekçi simüle edilmiş canlı puan durumu üretir."""
+    teams_data = [
+        ("Galatasaray", 92, 38),
+        ("Fenerbahçe", 90, 38),
+        ("Beşiktaş", 74, 38),
+        ("Trabzonspor", 64, 38),
+        ("Başakşehir FK", 62, 38),
+        ("Göztepe SK", 57, 38),
+        ("Konyaspor", 53, 38),
+        ("Antalyaspor", 52, 38),
+        ("Alanyaspor", 50, 38),
+        ("Kasımpaşa SK", 49, 38),
+        ("Sivasspor", 48, 38),
+        ("Eyüpspor", 47, 38),
+        ("Kayserispor", 46, 38),
+        ("Rizespor", 44, 38),
+        ("Bodrum FK", 43, 38),
+        ("Gaziantep FK", 42, 38),
+        ("Hatayspor", 41, 38),
+        ("Adana Demirspor", 37, 38),
+        ("Samsunspor", 32, 38),
+        ("Karagümrük", 25, 38)
+    ]
+    
+    standings = []
+    
+    # Puanlarda küçük rastgele değişiklikler (sezon devam ediyormuş gibi)
+    for pos, (team, base_points, played) in enumerate(teams_data, 1):
+        # Sezon ortasındaymış gibi simüle et
+        current_played = random.randint(15, 25)
+        points_per_game = base_points / played
+        current_points = int(current_played * points_per_game * random.uniform(0.9, 1.1))
+        
+        won = random.randint(int(current_played * 0.3), int(current_played * 0.7))
+        lost = random.randint(int(current_played * 0.1), int(current_played * 0.4))
+        drawn = current_played - won - lost
+        if drawn < 0:
+            drawn = 0
+            lost = current_played - won
+        
+        standings.append({
+            "pos": str(pos),
+            "team": team,
+            "played": str(current_played),
+            "won": str(won),
+            "drawn": str(drawn),
+            "lost": str(lost),
+            "points": str(current_points)
+        })
+    
+    return standings
+
+
 def create_analysis(status: str, matches: List[Dict]) -> List[Dict[str, Any]]:
     """Analiz bölümü için veri oluşturur."""
     analysis = []
@@ -138,7 +253,7 @@ def create_analysis(status: str, matches: List[Dict]) -> List[Dict[str, Any]]:
     
     # Maç özeti varsa ekle
     if matches:
-        for match in matches[:5]:  # İlk 5 maçı göster
+        for match in matches[:10]:  # İlk 10 maçı göster
             analysis.append({
                 "title": f"⚽ {match['status']} - {match['title']}",
                 "desc": match['desc'],
@@ -167,37 +282,30 @@ def main():
     """Ana fonksiyon."""
     print("🔄 Veriler çekiliyor...")
     
+    # API anahtarı opsiyonel (football-data.org için)
+    api_key = None  # İsterseniz buraya API anahtarınızı ekleyebilirsiniz
+    
     # Puan durumunu çek
-    standings = get_football_standings()
+    standings = get_football_standings(api_key)
     
     # Maç sonuçlarını çek
-    matches = get_recent_matches()
+    matches = get_recent_matches(api_key)
+    
+    use_mock_data = False
     
     if not standings:
-        # Yedek veri - önceki sezonun son durumu
-        standings = [
-            {"pos": "1", "team": "Galatasaray A.Ş.", "played": "38", "won": "29", "drawn": "5", "lost": "4", "points": "92"},
-            {"pos": "2", "team": "Fenerbahçe A.Ş.", "played": "38", "won": "28", "drawn": "6", "lost": "4", "points": "90"},
-            {"pos": "3", "team": "Beşiktaş A.Ş.", "played": "38", "won": "22", "drawn": "8", "lost": "8", "points": "74"},
-            {"pos": "4", "team": "Trabzonspor A.Ş.", "played": "38", "won": "18", "drawn": "10", "lost": "10", "points": "64"},
-            {"pos": "5", "team": "Başakşehir FK", "played": "38", "won": "17", "drawn": "11", "lost": "10", "points": "62"},
-            {"pos": "6", "team": "Göztepe SK", "played": "38", "won": "15", "drawn": "12", "lost": "11", "points": "57"},
-            {"pos": "7", "team": "Konyaspor", "played": "38", "won": "14", "drawn": "11", "lost": "13", "points": "53"},
-            {"pos": "8", "team": "Antalyaspor", "played": "38", "won": "13", "drawn": "13", "lost": "12", "points": "52"},
-            {"pos": "9", "team": "Alanyaspor", "played": "38", "won": "13", "drawn": "11", "lost": "14", "points": "50"},
-            {"pos": "10", "team": "Kasımpaşa SK", "played": "38", "won": "12", "drawn": "13", "lost": "13", "points": "49"},
-            {"pos": "11", "team": "Sivasspor", "played": "38", "won": "12", "drawn": "12", "lost": "14", "points": "48"},
-            {"pos": "12", "team": "Eyüpspor", "played": "38", "won": "11", "drawn": "14", "lost": "13", "points": "47"},
-            {"pos": "13", "team": "Kayserispor", "played": "38", "won": "11", "drawn": "13", "lost": "14", "points": "46"},
-            {"pos": "14", "team": "Rizespor", "played": "38", "won": "11", "drawn": "11", "lost": "16", "points": "44"},
-            {"pos": "15", "team": "Bodrum FK", "played": "38", "won": "10", "drawn": "13", "lost": "15", "points": "43"},
-            {"pos": "16", "team": "Gaziantep FK", "played": "38", "won": "10", "drawn": "12", "lost": "16", "points": "42"},
-            {"pos": "17", "team": "Hatayspor", "played": "38", "won": "9", "drawn": "14", "lost": "15", "points": "41"},
-            {"pos": "18", "team": "Adana Demirspor", "played": "38", "won": "8", "drawn": "13", "lost": "17", "points": "37"},
-            {"pos": "19", "team": "Samsunspor", "played": "38", "won": "7", "drawn": "11", "lost": "20", "points": "32"},
-            {"pos": "20", "team": "Karagümrük", "played": "38", "won": "5", "drawn": "10", "lost": "23", "points": "25"}
-        ]
-        status = "🟡 Football-Data.org API'ye şu anda ulaşılamıyor. Geçici yedek veriler gösteriliyor (2024-25 Sezonu Final)."
+        print("⚠️ API'den veri çekilemedi, simülasyon modu aktif...")
+        standings = generate_live_standings()
+        matches = generate_live_matches()
+        use_mock_data = True
+    
+    if not matches:
+        print("ℹ️ Maç verisi bulunamadı, simüle edilmiş maçlar oluşturuluyor...")
+        matches = generate_live_matches()
+        use_mock_data = True
+    
+    if use_mock_data:
+        status = "🟡 Simülasyon Modu: Gerçek zamanlı maç verileri simüle ediliyor. API anahtarı ekleyerek canlı verilere ulaşabilirsiniz."
     else:
         status = "🟢 Canlı Veriler Football-Data.org API'den Başarıyla Çekildi!"
     
@@ -207,8 +315,10 @@ def main():
     data = {
         "standings": standings,
         "analysis": analysis,
+        "matches": matches,
         "last_update": datetime.now().strftime("%d.%m.%Y %H:%M:%S"),
-        "source": "Football-Data.org API"
+        "source": "Simülasyon" if use_mock_data else "Football-Data.org API",
+        "is_live": not use_mock_data
     }
     
     save_data(data)
