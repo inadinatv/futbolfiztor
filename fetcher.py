@@ -1,12 +1,11 @@
 import json
 import urllib.request
 import xml.etree.ElementTree as ET
-import os
 
-# BURAYA RAPIDAPI'DEN ALDIĞIN ANAHTARI GİRMELİSİN
-API_KEY = "BURAYA_KENDI_RAPIDAPI_ANAHTARINI_YAZ"
+# Senin RapidAPI Anahtarın buraya eklendi
+API_KEY = "23f9a5f274msh45ab2adf1d7eaf9p1648fcjsne1a9747e08f8"
 LEAGUE_ID = "203" # Türkiye Süper Lig Kimliği
-SEASON = "2026"   # Güncel Sezon
+SEASON = "2026"   # Güncel Sezon (Bulunduğumuz yıl)
 
 def get_standings():
     url = f"https://api-football-v1.p.rapidapi.com/v3/standings?season={SEASON}&league={LEAGUE_ID}"
@@ -33,11 +32,11 @@ def get_standings():
                 })
             return standings
     except Exception as e:
-        print("Puan durumu çekilemedi (API Key hatalı veya limit dolmuş olabilir):", e)
+        print("Puan durumu çekilemedi:", e)
         return []
 
 def get_analysis():
-    # Güvenilir Kaynak: Profesyonel analizler ve özetler için RSS entegrasyonu
+    # TRT Spor RSS üzerinden analizler ve haberler
     rss_url = "https://www.trtspor.com.tr/rss/futbol.xml"
     news = []
     try:
@@ -46,19 +45,16 @@ def get_analysis():
             xml_data = response.read()
             root = ET.fromstring(xml_data)
             
-            # Son 12 analizi/haberi alalım
             for item in root.findall('./channel/item')[:12]:
                 title = item.find('title').text
                 link = item.find('link').text
                 desc = item.find('description').text if item.find('description') is not None else ""
                 
-                # Görsel çekme işlemi
                 img_url = ""
                 enclosure = item.find('enclosure')
                 if enclosure is not None:
                     img_url = enclosure.get('url')
                     
-                # İçeriği temizleyip kırpalım
                 clean_desc = desc[:130] + "..." if len(desc) > 130 else desc
                 
                 news.append({
@@ -78,10 +74,9 @@ def main():
     standings = get_standings()
     analysis = get_analysis()
     
-    # API key girilmemişse veya hata varsa placeholder veri
     if not standings:
         standings = [
-            {"pos": 1, "team": "Lütfen API Anahtarınızı Girin", "logo": "", "p": 0, "w": 0, "d": 0, "l": 0, "pts": 0}
+            {"pos": 1, "team": "Veri Bekleniyor", "logo": "", "p": 0, "w": 0, "d": 0, "l": 0, "pts": 0}
         ]
         
     output_data = {
