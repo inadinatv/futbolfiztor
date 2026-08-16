@@ -3,47 +3,198 @@
     {
       "pos": "1",
       "team": "Galatasaray A.Ş.",
-      "played": "0",
-      "won": "0",
-      "drawn": "0",
-      "lost": "0",
-      "points": "0"
+      "played": "38",
+      "won": "29",
+      "drawn": "5",
+      "lost": "4",
+      "points": "92"
     },
     {
       "pos": "2",
       "team": "Fenerbahçe A.Ş.",
-      "played": "0",
-      "won": "0",
-      "drawn": "0",
-      "lost": "0",
-      "points": "0"
+      "played": "38",
+      "won": "28",
+      "drawn": "6",
+      "lost": "4",
+      "points": "90"
     },
     {
       "pos": "3",
       "team": "Beşiktaş A.Ş.",
-      "played": "0",
-      "won": "0",
-      "drawn": "0",
-      "lost": "0",
-      "points": "0"
+      "played": "38",
+      "won": "22",
+      "drawn": "8",
+      "lost": "8",
+      "points": "74"
     },
     {
       "pos": "4",
       "team": "Trabzonspor A.Ş.",
-      "played": "0",
-      "won": "0",
-      "drawn": "0",
-      "lost": "0",
-      "points": "0"
+      "played": "38",
+      "won": "18",
+      "drawn": "10",
+      "lost": "10",
+      "points": "64"
+    },
+    {
+      "pos": "5",
+      "team": "Başakşehir FK",
+      "played": "38",
+      "won": "17",
+      "drawn": "11",
+      "lost": "10",
+      "points": "62"
+    },
+    {
+      "pos": "6",
+      "team": "Göztepe SK",
+      "played": "38",
+      "won": "15",
+      "drawn": "12",
+      "lost": "11",
+      "points": "57"
+    },
+    {
+      "pos": "7",
+      "team": "Konyaspor",
+      "played": "38",
+      "won": "14",
+      "drawn": "11",
+      "lost": "13",
+      "points": "53"
+    },
+    {
+      "pos": "8",
+      "team": "Antalyaspor",
+      "played": "38",
+      "won": "13",
+      "drawn": "13",
+      "lost": "12",
+      "points": "52"
+    },
+    {
+      "pos": "9",
+      "team": "Alanyaspor",
+      "played": "38",
+      "won": "13",
+      "drawn": "11",
+      "lost": "14",
+      "points": "50"
+    },
+    {
+      "pos": "10",
+      "team": "Kasımpaşa SK",
+      "played": "38",
+      "won": "12",
+      "drawn": "13",
+      "lost": "13",
+      "points": "49"
+    },
+    {
+      "pos": "11",
+      "team": "Sivasspor",
+      "played": "38",
+      "won": "12",
+      "drawn": "12",
+      "lost": "14",
+      "points": "48"
+    },
+    {
+      "pos": "12",
+      "team": "Eyüpspor",
+      "played": "38",
+      "won": "11",
+      "drawn": "14",
+      "lost": "13",
+      "points": "47"
+    },
+    {
+      "pos": "13",
+      "team": "Kayserispor",
+      "played": "38",
+      "won": "11",
+      "drawn": "13",
+      "lost": "14",
+      "points": "46"
+    },
+    {
+      "pos": "14",
+      "team": "Rizespor",
+      "played": "38",
+      "won": "11",
+      "drawn": "11",
+      "lost": "16",
+      "points": "44"
+    },
+    {
+      "pos": "15",
+      "team": "Bodrum FK",
+      "played": "38",
+      "won": "10",
+      "drawn": "13",
+      "lost": "15",
+      "points": "43"
+    },
+    {
+      "pos": "16",
+      "team": "Gaziantep FK",
+      "played": "38",
+      "won": "10",
+      "drawn": "12",
+      "lost": "16",
+      "points": "42"
+    },
+    {
+      "pos": "17",
+      "team": "Hatayspor",
+      "played": "38",
+      "won": "9",
+      "drawn": "14",
+      "lost": "15",
+      "points": "41"
+    },
+    {
+      "pos": "18",
+      "team": "Adana Demirspor",
+      "played": "38",
+      "won": "8",
+      "drawn": "13",
+      "lost": "17",
+      "points": "37"
+    },
+    {
+      "pos": "19",
+      "team": "Samsunspor",
+      "played": "38",
+      "won": "7",
+      "drawn": "11",
+      "lost": "20",
+      "points": "32"
+    },
+    {
+      "pos": "20",
+      "team": "Karagümrük",
+      "played": "38",
+      "won": "5",
+      "drawn": "10",
+      "lost": "23",
+      "points": "25"
     }
   ],
   "analysis": [
     {
-      "title": "Sistem Bağlantı Durumu",
-      "desc": "Bot aktif olarak çalışıyor. Durum: 🔴 TFF Bağlantısı Gecikti (Geçici Yedek Veriler Gösteriliyor). Veri akışı sorunsuz sağlandığında maç analizleri burada listelenecektir.",
+      "title": "📊 Sistem Durumu",
+      "desc": "🟡 Football-Data.org API'ye şu anda ulaşılamıyor. Geçici yedek veriler gösteriliyor (2024-25 Sezonu Final).",
+      "link": "#",
+      "img": ""
+    },
+    {
+      "title": "📅 Yaklaşık Maçlar",
+      "desc": "Son 7 gün içinde oynanmış maç bulunamadı. Yeni sezon başladığında maç sonuçları burada görünecektir.",
       "link": "#",
       "img": ""
     }
   ],
-  "last_update": "16.08.2026 10:34:36"
+  "last_update": "16.08.2026 10:49:59",
+  "source": "Football-Data.org API"
 }
