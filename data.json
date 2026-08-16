@@ -2,13 +2,47 @@
   "standings": [
     {
       "pos": 1,
-      "team": "Veriler şu an güncelleniyor...",
-      "p": 0,
-      "w": 0,
-      "d": 0,
-      "l": 0,
-      "pts": 0
+      "team": "Galatasaray A.Ş.",
+      "p": "-",
+      "w": "-",
+      "d": "-",
+      "l": "-",
+      "pts": "-"
+    },
+    {
+      "pos": 2,
+      "team": "Fenerbahçe A.Ş.",
+      "p": "-",
+      "w": "-",
+      "d": "-",
+      "l": "-",
+      "pts": "-"
+    },
+    {
+      "pos": 3,
+      "team": "Beşiktaş A.Ş.",
+      "p": "-",
+      "w": "-",
+      "d": "-",
+      "l": "-",
+      "pts": "-"
+    },
+    {
+      "pos": 4,
+      "team": "Trabzonspor A.Ş.",
+      "p": "-",
+      "w": "-",
+      "d": "-",
+      "l": "-",
+      "pts": "-"
     }
   ],
-  "analysis": []
+  "analysis": [
+    {
+      "title": "Veri Çekme İşlemi Beklemede (Bot Koruması)",
+      "desc": "Spor sitelerinin güvenlik sistemleri (Cloudflare) şu an anlık veri çekmemizi durdurdu. Bot sistemi 1 saat sonra farklı bir kanaldan tekrar veri çekmeyi deneyecektir.",
+      "link": "#",
+      "img": ""
+    }
+  ]
 }
