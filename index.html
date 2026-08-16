@@ -3,79 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Süper Lig Analiz ve Puan Durumu Merkezi</title>
+    <title>Futbol Analiz Merkezi</title>
     <style>
-        :root {
-            --bg: #0f172a;
-            --surface: #1e293b;
-            --primary: #3b82f6;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-        }
-        * { box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; }
+        :root { --bg: #0f172a; --surface: #1e293b; --primary: #3b82f6; --text: #f8fafc; --text-muted: #94a3b8; --border: #334155; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
         header { background: rgba(30, 41, 59, 0.9); padding: 1.5rem; text-align: center; border-bottom: 1px solid var(--border); }
-        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
-        h1 span { color: var(--primary); }
+        h1 { margin: 0; font-size: 1.8rem; } h1 span { color: var(--primary); }
+        #update-time { color: var(--text-muted); font-size: 0.9rem; margin-top: 10px; }
         
         .tabs { display: flex; justify-content: center; gap: 15px; padding: 15px; }
-        .tab-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .tab-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 10px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; }
         .tab-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
         
         .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-content.active { display: block; }
 
-        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .news-card { background: var(--surface); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); display: flex; flex-direction: column; }
-        .news-img { width: 100%; height: 190px; object-fit: cover; border-bottom: 3px solid var(--primary); }
-        .news-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
-        .news-title { font-size: 1.15rem; margin: 0 0 12px 0; font-weight: 700; line-height: 1.4; }
-        .news-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; flex-grow: 1; }
-        .read-more { display: inline-block; text-align: center; background: var(--primary); color: #fff; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
-
+        .news-card { background: var(--surface); border-radius: 12px; padding: 20px; border: 1px solid var(--border); margin-bottom: 15px; }
+        .news-title { font-size: 1.2rem; margin: 0 0 10px 0; color: var(--primary); }
+        
         .table-container { overflow-x: auto; background: var(--surface); border-radius: 12px; border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: rgba(0,0,0,0.3); font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); }
-        .team-cell { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+        th { background: rgba(0,0,0,0.3); color: var(--text-muted); }
         .pos { width: 32px; height: 32px; background: #334155; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-weight: bold; }
-        
-        /* Dinamik Avatar Stili */
-        .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>⚽ Futbol <span>Merkezi</span></h1>
+    <div id="update-time">Son Güncelleme: Kontrol Ediliyor...</div>
 </header>
 
 <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('analiz')">Analiz & Özetler</button>
+    <button class="tab-btn active" onclick="switchTab('analiz')">Sistem & Analiz</button>
     <button class="tab-btn" onclick="switchTab('puan')">Puan Durumu</button>
 </div>
 
 <div class="container">
     <div id="analiz" class="tab-content active">
-        <div id="news-container" class="news-grid">İçerikler yükleniyor...</div>
+        <div id="news-container">İçerikler yükleniyor...</div>
     </div>
 
     <div id="puan" class="tab-content">
         <div class="table-container">
             <table>
                 <thead>
-                    <tr>
-                        <th>Sıra</th>
-                        <th>Takım</th>
-                        <th>O</th>
-                        <th>G</th>
-                        <th>B</th>
-                        <th>M</th>
-                        <th>Puan</th>
-                    </tr>
+                    <tr><th>Sıra</th><th>Takım</th><th>O</th><th>G</th><th>B</th><th>M</th><th>Puan</th></tr>
                 </thead>
                 <tbody id="standings-body">
                     <tr><td colspan="7">Yükleniyor...</td></tr>
@@ -92,52 +67,31 @@
         event.currentTarget.classList.add('active');
     }
 
-    // Takım adına göre rastgele ama sabit bir renk ve baş harf üreten fonksiyon
-    function getAvatarHTML(teamName) {
-        const colors = ['#e11d48', '#2563eb', '#16a34a', '#d97706', '#7c3aed', '#0891b2', '#059669', '#be123c'];
-        const initial = teamName.charAt(0).toUpperCase();
-        const colorIndex = teamName.length % colors.length; // Takım isminin uzunluğuna göre sabit renk
-        return `<div class="avatar" style="background-color: ${colors[colorIndex]}">${initial}</div>`;
-    }
-
     async function loadData() {
         try {
-            // Önbellek sorununu aşmak için sonuna tarih ekliyoruz
             const res = await fetch('data.json?v=' + new Date().getTime());
             const data = await res.json();
 
-            // Analizleri Bas
+            document.getElementById('update-time').innerText = "Son Veri Güncellemesi: " + data.last_update;
+
             document.getElementById('news-container').innerHTML = data.analysis.map(item => `
                 <div class="news-card">
-                    ${item.img ? `<img src="${item.img}" class="news-img">` : ``}
-                    <div class="news-body">
-                        <h3 class="news-title">${item.title}</h3>
-                        <p class="news-desc">${item.desc}</p>
-                        <a href="${item.link}" target="_blank" class="read-more">Detaylı Oku</a>
-                    </div>
+                    <h3 class="news-title">${item.title}</h3>
+                    <p style="color:var(--text-muted); line-height:1.5;">${item.desc}</p>
                 </div>
             `).join('');
 
-            // Puan Durumunu Bas (Logolar yerine dinamik avatarlar)
             document.getElementById('standings-body').innerHTML = data.standings.map(t => `
                 <tr>
                     <td><span class="pos">${t.pos}</span></td>
-                    <td>
-                        <div class="team-cell">
-                            ${getAvatarHTML(t.team)}
-                            ${t.team}
-                        </div>
-                    </td>
-                    <td>${t.p}</td>
-                    <td>${t.w}</td>
-                    <td>${t.d}</td>
-                    <td>${t.l}</td>
+                    <td style="font-weight:600;">${t.team}</td>
+                    <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
                     <td><strong style="color:var(--primary); font-size:1.1rem;">${t.pts}</strong></td>
                 </tr>
             `).join('');
             
         } catch (e) {
-            console.error("Hata:", e);
+            document.getElementById('news-container').innerHTML = '<div class="news-card"><h3 class="news-title">🔴 Kritik Hata</h3><p>data.json dosyası GitHub tarafından oluşturulmamış veya Vercel bağlantısı kopmuş. Lütfen GitHub Actions sekmesini kontrol et.</p></div>';
         }
     }
     loadData();
